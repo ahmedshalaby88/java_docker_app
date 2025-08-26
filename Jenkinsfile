@@ -34,7 +34,7 @@ pipeline {
         stage('Push Docker') {
             steps {
                 echo "Pushing Docker image..."
-                bat "docker push ${DOCKER_IMAGE}"
+                bat "docker push ahmedshalaby88/myapp-image:latest"
             }
         }
     }
