@@ -4,21 +4,21 @@ pipeline {
     environment {
         DOCKER_IMAGE = "myapp-image"
         DOCKER_TAG = "latest"
-        DOCKER_REGISTRY = "ahmedshalaby88"
+        DOCKER_REGISTRY = "ahmedshalaby88" 
     }
 
     stages {
         stage('Build JAR') {
             steps {
                 echo "Compiling Java project..."
-                sh 'javac MyApp.java'
+                bat 'javac MyApp.java'
             }
         }
 
         stage('Build Docker') {
             steps {
                 echo "Building Docker image..."
-                sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} ."
+                bat "docker build -t %DOCKER_IMAGE%:%DOCKER_TAG% ."
             }
         }
 
@@ -26,7 +26,7 @@ pipeline {
             steps {
                 echo "Logging in to Docker Hub..."
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-cred', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    bat 'echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin'
                 }
             }
         }
@@ -34,8 +34,8 @@ pipeline {
         stage('Push Docker') {
             steps {
                 echo "Pushing Docker image..."
-                sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}"
-                sh "docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${DOCKER_TAG}"
+                bat "docker tag %DOCKER_IMAGE%:%DOCKER_TAG% %DOCKER_REGISTRY%/%DOCKER_IMAGE%:%DOCKER_TAG%"
+                bat "docker push %DOCKER_REGISTRY%/%DOCKER_IMAGE%:%DOCKER_TAG%"
             }
         }
     }
@@ -44,6 +44,6 @@ pipeline {
         always {
             echo "Cleaning workspace..."
             cleanWs()
- }
-}
+        }
+    }
 }
