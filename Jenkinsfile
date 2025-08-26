@@ -34,8 +34,7 @@ pipeline {
         stage('Push Docker') {
             steps {
                 echo "Pushing Docker image..."
-                bat "docker tag %DOCKER_IMAGE%:%DOCKER_TAG% %DOCKER_REGISTRY%/%DOCKER_IMAGE%:%DOCKER_TAG%"
-                bat "docker push %DOCKER_REGISTRY%/%DOCKER_IMAGE%:%DOCKER_TAG%"
+                bat "docker push ${DOCKER_IMAGE}"
             }
         }
     }
